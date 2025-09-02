@@ -1,44 +1,25 @@
 const express=require("express")
 const mongoose=require("mongoose")
-const {GridFsStorage}=require("multer-gridfs-storage")
-const multer=require("multer")
-const Grid=require("gridfs-stream")
 const app=express()
+const path=require("path")
+app.use(express.static(path.join(__dirname,("public"))))
+// mongoose.connect("mongodb+srv://eazybel27:YU5blJj4BhFdnEr4@syntax.ggwqid2.mongodb.net/?retryWrites=true&w=majority&appName=syntax")
+// .then(()=>{
+//     console.log("DB Saved")
+// })
 
-mongoose.connect("mongodb+srv://eazybel27:YU5blJj4BhFdnEr4@syntax.ggwqid2.mongodb.net/?retryWrites=true&w=majority&appName=syntax")
-.then(()=>{
-    console.log("DB Saved")
-})
 
-const storage= new GridFsStorage({
-    url:"mongodb+srv://eazybel27:YU5blJj4BhFdnEr4@syntax.ggwqid2.mongodb.net/?retryWrites=true&w=majority&appName=syntax",
-    file:(req,file)=>{
-        const fileName=Date.now()+"-"+file.originalnamw
-    return {
-                fileName,
-                bucketName:"upload"
-        }
-    }
-})
-const upload=multer({storage})
-const testSchema=new mongoose.Schema({
-    profileImage:String,
-    cv:String
-})
-const testModel=new mongoose.model("testModel",testSchema,"TestFile")
+// const testSchema=new mongoose.Schema({
+//     profileImage:String,
+//     cv:String,
+//     name:String,
+//     age:Number
+// })
+// const testModel=new mongoose.model("testModel",testSchema,"TestFile")
 
-app.post("/",upload.fields([
-   { name:"profileImage",maxCount:1},
-    {name:"cv",maxCount:1}
-]),(req,res)=>{
-    const newProfile=testModel.insertOne({
-        profileImage:profileImage,
-        cv:cv
-    })
-newProfile.save()
-.then(()=>{
-    console.log("Saved")
-})
+app.get("/",async (req,res)=>{
+   
+res.sendFile("/index.html")
 })
 
 app.get("/",(req,res)=>{
